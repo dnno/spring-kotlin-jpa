@@ -12,7 +12,7 @@ import javax.transaction.Transactional
 
 @Service
 @Transactional
-internal class DefaultCityService(val cityRepo: CityRepository, val log: Logger) : CityService {
+internal class JpaCityService(val cityRepo: CityRepository, val log: Logger) : CityService {
 
     override fun retrieveCity(cityId: String): CityDto? {
         log.debug("Retrieving city: {}", cityId)

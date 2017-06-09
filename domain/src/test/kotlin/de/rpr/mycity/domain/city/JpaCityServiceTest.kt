@@ -26,11 +26,11 @@ import javax.transaction.Transactional
 
 @RunWith(SpringRunner::class)
 @ContextConfiguration(classes = arrayOf(
-        DefaultCityServiceTest.Config::class,
+        JpaCityServiceTest.Config::class,
         CityConfig::class))
 @Transactional
 @DataJpaTest
-internal class DefaultCityServiceTest {
+internal class JpaCityServiceTest {
 
     class Config {
 
