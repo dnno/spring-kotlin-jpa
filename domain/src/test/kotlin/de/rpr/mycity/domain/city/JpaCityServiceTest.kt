@@ -22,13 +22,12 @@ import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Scope
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.context.junit4.SpringRunner
-import javax.transaction.Transactional
+import java.time.LocalDateTime
 
 @RunWith(SpringRunner::class)
 @ContextConfiguration(classes = arrayOf(
         JpaCityServiceTest.Config::class,
         CityConfig::class))
-@Transactional
 @DataJpaTest
 internal class JpaCityServiceTest {
 
@@ -93,23 +92,37 @@ internal class JpaCityServiceTest {
 
     @Test
     fun `'updateCity' should update existing values`() {
-        val existingCity = repository.save(CityEntity("city", "cityname", "description", Coordinate(1.0, -1.0)))
-        val result = service.updateCity(existingCity.id!!, UpdateCityDto("new name", "new description", CoordinateDto(-1.0, -1.0)))
+        val existingCity = repository.save(CityEntity("city", "cityname", "description", Coordinate(1.0, -1.0))).toDto()
+
+        val result = service.updateCity(existingCity.id, UpdateCityDto("new name", "new description", CoordinateDto(-1.0, -1.0)))
+
         softly.assertThat(result).isNotNull
         softly.assertThat(result?.id).isEqualTo(existingCity.id)
         softly.assertThat(result?.name).isEqualTo("new name")
         softly.assertThat(result?.description).isEqualTo("new description")
         softly.assertThat(result?.location).isEqualTo(CoordinateDto(-1.0, -1.0))
+        softly.assertThat(result?.updatedAt).isAfter(existingCity.updatedAt)
+        softly.assertThat(result?.updatedAt).isAfter(existingCity.updatedAt)
+        softly.assertThat(result?.createdAt).isEqualTo(existingCity.createdAt)
     }
 
     @Test
     fun `'updateCity' shouldn't update null values`() {
-        val existingCity = repository.save(CityEntity("city", "cityname", "description", Coordinate(1.0, -1.0)))
-        val result = service.updateCity(existingCity.id!!, UpdateCityDto(null, null, null))
+        val existingCity = repository.save(CityEntity(
+                id = "city",
+                name = "cityname",
+                description = "description",
+                location = Coordinate(1.0, -1.0),
+                updatedAt = LocalDateTime.now().minusYears(1))).toDto()
+
+        val result = service.updateCity(existingCity.id, UpdateCityDto(null, null, null))
+
         softly.assertThat(result).isNotNull
         softly.assertThat(result?.id).isEqualTo(existingCity.id)
         softly.assertThat(result?.name).isEqualTo("cityname")
         softly.assertThat(result?.description).isEqualTo("description")
         softly.assertThat(result?.location).isEqualTo(CoordinateDto(1.0, -1.0))
+        softly.assertThat(result?.updatedAt).isAfter(existingCity.updatedAt)
+        softly.assertThat(result?.createdAt).isEqualTo(existingCity.createdAt)
     }
 }
