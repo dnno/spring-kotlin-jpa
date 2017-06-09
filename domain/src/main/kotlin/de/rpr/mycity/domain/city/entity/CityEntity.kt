@@ -57,7 +57,7 @@ internal data class CityEntity(
                 id = defaultCity.id!!,
                 name = dto.name ?: defaultCity.name,
                 description = dto.description ?: defaultCity.description,
-                location = if (dto.location != null) Coordinate(dto.location.longitude, dto.location.latitude) else defaultCity.location,
+                location = if (dto.location != null) Coordinate.fromDto(dto.location) else defaultCity.location,
                 updatedAt = LocalDateTime.now(),
                 createdAt = defaultCity.createdAt)
 
