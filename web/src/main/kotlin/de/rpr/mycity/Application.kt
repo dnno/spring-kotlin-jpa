@@ -1,8 +1,5 @@
 package de.rpr.mycity
 
-import com.fasterxml.jackson.databind.DeserializationFeature
-import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.module.kotlin.KotlinModule
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.InjectionPoint
@@ -17,13 +14,6 @@ class Application {
     @Bean
     @Scope("prototype")
     fun logger(injectionPoint: InjectionPoint): Logger = LoggerFactory.getLogger(injectionPoint.methodParameter.containingClass)
-
-    @Bean
-    fun objectMapper(): ObjectMapper {
-        val mapper = ObjectMapper().registerModule(KotlinModule())
-        mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
-        return mapper
-    }
 
 }
 

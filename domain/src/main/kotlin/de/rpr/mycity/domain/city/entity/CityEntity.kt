@@ -21,13 +21,6 @@ internal data class CityEntity(
         val updatedAt: LocalDateTime = LocalDateTime.now(),
         val createdAt: LocalDateTime = LocalDateTime.now()) {
 
-    // Default constructor for JPA
-    @Suppress("unused")
-    private constructor() : this(
-            name = "",
-            location = Coordinate.origin(),
-            updatedAt = LocalDateTime.MIN)
-
     fun toDto(): CityDto = CityDto(
             id = this.id!!,
             name = this.name,
