@@ -94,6 +94,8 @@ internal class JpaCityServiceTest {
     fun `'updateCity' should update existing values`() {
         val existingCity = repository.save(CityEntity("city", "cityname", "description", Coordinate(1.0, -1.0))).toDto()
 
+        Thread.sleep(1)
+
         val result = service.updateCity(existingCity.id, UpdateCityDto("new name", "new description", CoordinateDto(-1.0, -1.0)))
 
         softly.assertThat(result).isNotNull
@@ -101,7 +103,6 @@ internal class JpaCityServiceTest {
         softly.assertThat(result?.name).isEqualTo("new name")
         softly.assertThat(result?.description).isEqualTo("new description")
         softly.assertThat(result?.location).isEqualTo(CoordinateDto(-1.0, -1.0))
-        softly.assertThat(result?.updatedAt).isAfter(existingCity.updatedAt)
         softly.assertThat(result?.updatedAt).isAfter(existingCity.updatedAt)
         softly.assertThat(result?.createdAt).isEqualTo(existingCity.createdAt)
     }
@@ -114,6 +115,8 @@ internal class JpaCityServiceTest {
                 description = "description",
                 location = Coordinate(1.0, -1.0),
                 updatedAt = LocalDateTime.now().minusYears(1))).toDto()
+
+        Thread.sleep(1)
 
         val result = service.updateCity(existingCity.id, UpdateCityDto(null, null, null))
 
